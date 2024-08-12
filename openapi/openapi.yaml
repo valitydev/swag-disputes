@@ -23,12 +23,12 @@ info:
       Content-Type: application/json; charset=utf-8
       Content-Type: multipart/form-data
     ```
-  termsOfService: https://vality.com
+  termsOfService: https://vality.dev
   contact:
     name: Команда техподдержки
-    email: support@vality.com
+    email: support@vality.dev
 servers:
-  - url: https://api.vality.com/disputes
+  - url: https://api.vality.dev/disputes
 security:
   - bearerAuth: [ ]
 tags:
@@ -161,9 +161,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-        '422':
-          description: Метод не поддерживается в рамках текущей интеграции
-          $ref: '#/components/responses/NotSupportedByProvider'
 components:
   securitySchemes:
     bearerAuth:
@@ -171,11 +168,11 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: |
-        Взаимодействие между мерчантом и [системой](https://vality.com/) осуществляется по защищенному протоколу (HTTPS). HTTP-запросы по нешифрованному каналу не поддерживаются.
+        Взаимодействие между мерчантом и [системой](https://vality.dev/) осуществляется по защищенному протоколу (HTTPS). HTTP-запросы по нешифрованному каналу не поддерживаются.
 
-        Ознакомиться с деталями авторизации запросов к API можно в [данной](https://developer.vality.com/docs/payments/overview/#api) статье.
+        Ознакомиться с деталями авторизации запросов к API можно в [данной](https://developer.vality.dev/docs/payments/overview/#api) статье.
 
-        Управлять API-ключами можно в [личном кабинете](https://dashboard.vality.com/). Значение ключа следует передать в заголовке `Authorization`:
+        Управлять API-ключами можно в [личном кабинете](https://dashboard.vality.dev/). Значение ключа следует передать в заголовке `Authorization`:
 
         ```
         Authorization: Bearer MjMyNDQxMjM6NDUzRmRnZDQ0M...
@@ -234,20 +231,10 @@ components:
         - exponent
       properties:
         amount:
-          description: >
-            Сумма перечисляемая выбранному назначению в минорных денежных
-            единицах,
-
-            например в копейках в случае указания российских рублей в качестве
-            валюты.
+          description: Сумма платежа, которая будет оспариваться в диспуте
           type: integer
           format: int64
           minimum: 1
-        exponent:
-          description: Размерность минорных единиц
-          type: integer
-          format: int32
-          minimum: 0
         currency:
           description: >-
             Валюта, символьный код согласно [ISO
