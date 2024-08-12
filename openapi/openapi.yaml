@@ -89,7 +89,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DisputeId'
+                type: object
+                required:
+                  - disputeId
+                properties:
+                  disputeId:
+                    $ref: '#/components/schemas/DisputeId'
         '400':
           description: Ошибка в формате запроса
           $ref: '#/components/responses/DefaultLogicError'
