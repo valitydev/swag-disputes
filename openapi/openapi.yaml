@@ -1,0 +1,37 @@
+openapi: 3.0.3
+info:
+  title: Vality Disputes
+  version: 0.1.0
+  description: |
+
+    ## Описание
+    Vality Disputes предоставляет операции для заявок в системе для открытия спора и предназначен для мерчантов.
+
+    ## Детали взаимодействия
+
+    При любом обращении к API в заголовке `X-Request-ID` соответствующего запроса необходимо передать его уникальный идентификатор:
+
+    ```
+     X-Request-ID: 37d735d4-0f42-4f05-89fa-eaa478fb5aa9
+    ```
+
+    ### Тип содержимого и кодировка
+
+    Система принимает и возвращает данные в формате JSON и кодировке UTF-8:
+
+    ```
+      Content-Type: application/json; charset=utf-8
+    ```
+  termsOfService: https://vality.com
+  contact:
+    name: Команда техподдержки
+    email: support@vality.com
+servers:
+  - url: https://api.vality.com/disputes
+security:
+  - bearerAuth: [ ]
+tags:
+  - name: disputes
+    x-displayName: Disputes
+    description: |
+      Диспуты - это открытые споры по платежам.
