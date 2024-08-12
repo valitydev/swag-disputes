@@ -17,10 +17,11 @@ info:
 
     ### Тип содержимого и кодировка
 
-    Система принимает и возвращает данные в формате JSON и кодировке UTF-8:
+    Система принимает данные либо в формате JSON либо multipart/form-data и возвращает данные в формате JSON и кодировке UTF-8:
 
     ```
       Content-Type: application/json; charset=utf-8
+      Content-Type: multipart/form-data
     ```
   termsOfService: https://vality.com
   contact:
@@ -35,3 +36,238 @@ tags:
     x-displayName: Disputes
     description: |
       Диспуты - это открытые споры по платежам.
+paths:
+  /create:
+    post:
+      operationId: create
+      summary: Создать диспут
+      tags:
+        - disputes
+      parameters:
+        - $ref: '#/components/parameters/requestID'
+      requestBody:
+        description: Параметры диспута
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - invoiceId
+                - paymentId
+                - attachments
+              properties:
+                invoiceId:
+                  $ref: '#/components/schemas/InvoiceID'
+                paymentId:
+                  $ref: '#/components/schemas/PaymentID'
+                attachments:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - attachment
+                    properties:
+                      attachment:
+                        type: string
+                        format: binary
+                        description: Загружаемый файл
+                      name:
+                        type: string
+                        description: Имя файла
+                      mimeType:
+                        type: string
+                        description: Тип файла
+                amount:
+                  $ref: '#/components/schemas/Amount'
+                reason:
+                  type: string
+                  description: Причина открытия диспута
+      responses:
+        '200':
+          description: Диспут создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisputeId'
+        '400':
+          description: Ошибка в формате запроса
+          $ref: '#/components/responses/DefaultLogicError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          description: Метод не поддерживается в рамках текущей интеграции
+          $ref: '#/components/responses/NotSupportedByProvider'
+  /status:
+    get:
+      operationId: status
+      summary: Получить статус диспута
+      tags:
+        - disputes
+      parameters:
+        - $ref: '#/components/parameters/requestID'
+        - name: invoiceId
+          description: Уникальный идентификатор инвоиса
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/InvoiceID'
+        - name: paymentId
+          description: Уникальный идентификатор платежа
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/PaymentID'
+        - name: disputeId
+          description: Идентификатор диспута
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/DisputeId'
+      responses:
+        '200':
+          description: Получен статус диспута
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                properties:
+                  status:
+                    description: Статус диспута
+                    type: string
+                    enum:
+                      - pending
+                      - succeeded
+                      - failed
+                  reason:
+                    description: Причина фейла
+                    $ref: '#/components/responses/DefaultLogicError'
+                  changedAmount:
+                    description: Измененная сумма платежа
+                    $ref: '#/components/schemas/Amount'
+        '400':
+          description: Ошибка в формате запроса
+          $ref: '#/components/responses/DefaultLogicError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          description: Метод не поддерживается в рамках текущей интеграции
+          $ref: '#/components/responses/NotSupportedByProvider'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Взаимодействие между мерчантом и [системой](https://vality.com/) осуществляется по защищенному протоколу (HTTPS). HTTP-запросы по нешифрованному каналу не поддерживаются.
+
+        Ознакомиться с деталями авторизации запросов к API можно в [данной](https://developer.vality.com/docs/payments/overview/#api) статье.
+
+        Управлять API-ключами можно в [личном кабинете](https://dashboard.vality.com/). Значение ключа следует передать в заголовке `Authorization`:
+
+        ```
+        Authorization: Bearer MjMyNDQxMjM6NDUzRmRnZDQ0M...
+        ```
+
+        Ключи не разделяются на тестовые и боевые. Для проведения тестовых транзакций используйте идентификатор тестового магазина.
+
+        **Важно! Не передавайте API-ключ третьим лицам!**
+  responses:
+    NotFound:
+      description: Target resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GeneralError'
+    Unauthorized:
+      description: Authorization error
+    DefaultLogicError:
+      description: Invalid data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DefaultLogicError'
+    NotSupportedByProvider:
+      description: Not supported by provider
+  parameters:
+    requestID:
+      name: X-Request-ID
+      in: header
+      description: Идентификатор запроса к системе
+      required: true
+      schema:
+        type: string
+        maxLength: 40
+        minLength: 1
+  schemas:
+    InvoiceID:
+      description: Идентификатор инвоиса, на основе которого был создан платёж
+      type: string
+      maxLength: 40
+      minLength: 1
+    PaymentID:
+      description: Идентификатор платежа
+      type: string
+      maxLength: 40
+      minLength: 1
+    DisputeId:
+      description: Идентификатор диспута
+      type: string
+      maxLength: 40
+      minLength: 1
+    Amount:
+      type: object
+      required:
+        - amount
+        - exponent
+      properties:
+        amount:
+          description: >
+            Сумма перечисляемая выбранному назначению в минорных денежных
+            единицах,
+
+            например в копейках в случае указания российских рублей в качестве
+            валюты.
+          type: integer
+          format: int64
+          minimum: 1
+        exponent:
+          description: Размерность минорных единиц
+          type: integer
+          format: int32
+          minimum: 0
+        currency:
+          description: >-
+            Валюта, символьный код согласно [ISO
+            4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+          type: string
+          pattern: '^[A-Z]{3}$'
+    DefaultLogicError:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          description: Error code
+          type: string
+          enum:
+            - invalidRequest
+            - invalidDeadline
+        message:
+          description: Человекочитаемое описание ошибки
+          type: string
+    GeneralError:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
