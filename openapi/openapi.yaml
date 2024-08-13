@@ -30,7 +30,7 @@ info:
 servers:
   - url: https://api.vality.dev/disputes
 security:
-  - bearerAuth: [ ]
+  - bearerAuth: []
 tags:
   - name: disputes
     x-displayName: Disputes
@@ -236,11 +236,9 @@ components:
           format: int64
           minimum: 1
         currency:
-          description: >-
-            Валюта, символьный код согласно [ISO
-            4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
+          description: Валюта, символьный код согласно [ISO 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
           type: string
-          pattern: '^[A-Z]{3}$'
+          pattern: ^[A-Z]{3}$
     DefaultLogicError:
       type: object
       required:

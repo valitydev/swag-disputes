@@ -13,7 +13,6 @@ preprocessors:
 theme:
   openapi:
     showConsole: true
-    layout:
-      scope: section
+    layout: three-panel
     routingStrategy: browser
     htmlTemplate: ./web/index.html
