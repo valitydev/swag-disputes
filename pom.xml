@@ -22,6 +22,9 @@
         <default.package>dev.vality.swag.disputes</default.package>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <revision>SNAPSHOT</revision>
+        <java.version>15</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <slf4j-version>2.0.13</slf4j-version>
         <junit-version>4.13.2</junit-version>
         <jackson-version>2.13.1</jackson-version>
