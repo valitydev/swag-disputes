@@ -28,7 +28,7 @@
         <slf4j-version>2.0.13</slf4j-version>
         <junit-version>4.13.2</junit-version>
         <jackson-version>2.13.1</jackson-version>
-        <spring-version>3.3.1</spring-version>
+        <spring-version>2.7.10</spring-version>
         <openapi-generator-version>7.6.0</openapi-generator-version>
     </properties>
 
@@ -141,7 +141,6 @@
                                         <dateLibrary>java8</dateLibrary>
                                         <delegatePattern>true</delegatePattern>
                                         <useBeanValidation>true</useBeanValidation>
-                                        <useSpringBoot3>true</useSpringBoot3>
                                     </configOptions>
                                 </configuration>
                             </execution>
