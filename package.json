@@ -12,8 +12,9 @@
   },
   "scripts": {
     "start": "openapi preview-docs",
-    "build": "openapi bundle -o openapi/openapi.yaml",
-    "docs": "redocly build-docs openapi/openapi.yaml --output static/index.html",
-    "validate": "openapi lint"
+    "build": "openapi bundle -o web_deploy/openapi.yaml && openapi bundle -o web_deploy/openapi.json",
+    "docs": "redocly build-docs ./web_deploy/openapi.yaml --output static/index.html",
+    "validate": "openapi lint",
+    "codegen": "vality-openapi generate ./web_deploy/openapi.json"
   }
 }

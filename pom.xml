@@ -128,7 +128,7 @@
                                     <goal>generate</goal>
                                 </goals>
                                 <configuration>
-                                    <inputSpec>openapi/openapi.yaml</inputSpec>
+                                    <inputSpec>web_deploy/openapi.yaml</inputSpec>
                                     <generatorName>spring</generatorName>
                                     <generateModels>true</generateModels>
                                     <generateApis>true</generateApis>
@@ -165,7 +165,7 @@
                                     <goal>generate</goal>
                                 </goals>
                                 <configuration>
-                                    <inputSpec>openapi/openapi.yaml</inputSpec>
+                                    <inputSpec>web_deploy/openapi.yaml</inputSpec>
                                     <generatorName>java</generatorName>
                                     <configOptions>
                                         <dateLibrary>java8</dateLibrary>

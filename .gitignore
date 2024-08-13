@@ -1,6 +1,12 @@
 # Dir for API portal deploy
 dist
 out
+/.idea/
+/lib/
+/node_modules/
+/static/
+/web_deploy/
+openapitools.json
 
 # Logs
 logs
@@ -38,7 +44,7 @@ node_modules
 
 # Generated
 web_deploy/
-target
+target/
 
 # User-specific stuff:
 .idea/
@@ -60,10 +66,8 @@ target
 # Gradle:
 .idea/gradle.xml
 .idea/libraries
+.DS_Store
+spec/.DS_Store
 
 # Frontend
 /lib
-redoc-static.html
-
-#Mac OS
-.DS_Store
