@@ -1,7 +1,10 @@
 name: gh-pages
+
 on:
   push:
-    branches: [ master ]
+    branches:
+      - 'master'
+      - 'main'
 
 env:
   NODEJS_VERSION: '16'
@@ -20,12 +23,12 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
           cache: npm
       - run: npm install
-      - name: Patch specification
+      - name: Build
         run: npm run build
-      - name: Bundle ReDoc site
-        run: npm run redoc
+      - name: Build static
+        run: npm run docs
       - name: Publish ReDoc on Github Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./static
