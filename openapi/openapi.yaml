@@ -150,7 +150,7 @@ paths:
                       - failed
                   reason:
                     description: Причина фейла
-                    $ref: '#/components/schemas/DefaultLogicError'
+                    $ref: '#/components/schemas/GeneralError'
                   changedAmount:
                     description: Измененная сумма платежа
                     $ref: '#/components/schemas/Amount'
