@@ -79,7 +79,10 @@ paths:
                         description: Тип файла
                         example: application/pdf
                 amount:
-                  $ref: '#/components/schemas/Amount'
+                  description: Сумма платежа в минорных единицах, которая будет оспариваться в диспуте
+                  type: integer
+                  format: int64
+                  minimum: 1
                 reason:
                   type: string
                   description: Причина открытия диспута
@@ -149,8 +152,10 @@ paths:
                     description: Причина фейла
                     $ref: '#/components/schemas/GeneralError'
                   changedAmount:
-                    description: Измененная сумма платежа
-                    $ref: '#/components/schemas/Amount'
+                    description: Измененная сумма платежа в минорных единицах
+                    type: integer
+                    format: int64
+                    minimum: 1
         '400':
           description: Ошибка в формате запроса
           $ref: '#/components/responses/DefaultLogicError'
@@ -219,21 +224,6 @@ components:
       type: string
       maxLength: 40
       minLength: 1
-    Amount:
-      type: object
-      required:
-        - amount
-        - exponent
-      properties:
-        amount:
-          description: Сумма платежа, которая будет оспариваться в диспуте
-          type: integer
-          format: int64
-          minimum: 1
-        currency:
-          description: Валюта, символьный код согласно [ISO 4217](http://www.iso.org/iso/home/standards/currency_codes.htm).
-          type: string
-          pattern: ^[A-Z]{3}$
     DefaultLogicError:
       type: object
       required:
