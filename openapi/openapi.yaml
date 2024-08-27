@@ -89,6 +89,15 @@ paths:
       responses:
         '200':
           description: Диспут создан
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - disputeId
+                properties:
+                  disputeId:
+                    $ref: '#/components/schemas/DisputeId'
         '400':
           $ref: '#/components/responses/InvalidRequest'
         '401':
@@ -115,6 +124,12 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/PaymentID'
+        - name: disputeId
+          description: Идентификатор диспута
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/DisputeId'
       responses:
         '200':
           description: Получен статус диспута
@@ -195,6 +210,11 @@ components:
       minLength: 1
     PaymentID:
       description: Идентификатор платежа
+      type: string
+      maxLength: 40
+      minLength: 1
+    DisputeId:
+      description: Идентификатор диспута
       type: string
       maxLength: 40
       minLength: 1
