@@ -99,8 +99,7 @@ paths:
                   disputeId:
                     $ref: '#/components/schemas/DisputeId'
         '400':
-          description: Ошибка в формате запроса
-          $ref: '#/components/responses/DefaultLogicError'
+          $ref: '#/components/responses/InvalidRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -157,8 +156,7 @@ paths:
                     format: int64
                     minimum: 1
         '400':
-          description: Ошибка в формате запроса
-          $ref: '#/components/responses/DefaultLogicError'
+          $ref: '#/components/responses/InvalidRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -186,18 +184,14 @@ components:
   responses:
     NotFound:
       description: Target resource not found
+    Unauthorized:
+      description: Authorization error
+    InvalidRequest:
+      description: Invalid request data
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GeneralError'
-    Unauthorized:
-      description: Authorization error
-    DefaultLogicError:
-      description: Invalid data
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/DefaultLogicError'
   parameters:
     requestID:
       name: X-Request-ID
@@ -224,25 +218,11 @@ components:
       type: string
       maxLength: 40
       minLength: 1
-    DefaultLogicError:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          description: Error code
-          type: string
-          enum:
-            - invalidRequest
-            - invalidDeadline
-        message:
-          description: Человекочитаемое описание ошибки
-          type: string
     GeneralError:
       type: object
       required:
         - message
       properties:
         message:
+          description: Человекочитаемое описание ошибки
           type: string
