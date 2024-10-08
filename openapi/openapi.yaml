@@ -112,18 +112,6 @@ paths:
         - disputes
       parameters:
         - $ref: '#/components/parameters/requestID'
-        - name: invoiceId
-          description: Уникальный идентификатор инвоиса
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/InvoiceID'
-        - name: paymentId
-          description: Уникальный идентификатор платежа
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/PaymentID'
         - name: disputeId
           description: Идентификатор диспута
           in: query
