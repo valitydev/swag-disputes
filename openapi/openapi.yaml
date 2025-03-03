@@ -165,9 +165,10 @@ paths:
             schema:
               type: object
               required:
+                - disputeId
                 - invoiceId
                 - paymentId
-                - attachments
+                - status
               properties:
                 disputeId:
                   $ref: '#/components/schemas/DisputeId'
