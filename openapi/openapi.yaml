@@ -7,28 +7,17 @@ info:
     ## Описание
     Vality Disputes предоставляет операции для заявок в системе для открытия спора и предназначен для мерчантов.
 
-    ## Детали взаимодействия
-
-    При любом обращении к API в заголовке `X-Request-ID` соответствующего запроса необходимо передать его уникальный идентификатор:
-
-    ```
-     X-Request-ID: 37d735d4-0f42-4f05-89fa-eaa478fb5aa9
-    ```
-
     ### Тип содержимого и кодировка
 
-    Система принимает данные либо в формате JSON либо multipart/form-data и возвращает данные в формате JSON и кодировке UTF-8:
+    Система принимает данные либо в формате JSON и возвращает данные в формате JSON и кодировке UTF-8:
 
     ```
       Content-Type: application/json; charset=utf-8
-      Content-Type: multipart/form-data
     ```
   termsOfService: https://vality.dev
   contact:
     name: Команда техподдержки
     email: support@vality.dev
-servers:
-  - url: https://api.vality.dev/disputes
 security:
   - bearerAuth: []
 tags:
@@ -36,15 +25,19 @@ tags:
     x-displayName: Disputes
     description: |
       Диспуты - это открытые споры по платежам.
+  - name: notifications
+    x-displayName: Notifications
+    description: |
+      Спецификация определяет протокол для доставки уведомлений о изменении статуса диспута в вашей организации. Уведомления доставляются системой в виде HTTP-запросов, содержащий сообщение JSON на URL-адрес, указанный при создании диспута. Обработчики таких запросов должны быть реализованы на стороне вашего серверного кода в соответствии со спецификацией.
 paths:
   /create:
+    servers:
+      - url: https://api.vality.dev/disputes
     post:
       operationId: create
       summary: Создать диспут
       tags:
         - disputes
-      parameters:
-        - $ref: '#/components/parameters/requestID'
       requestBody:
         description: Параметры диспута
         required: true
@@ -86,6 +79,12 @@ paths:
                 reason:
                   type: string
                   description: Причина открытия диспута
+                notificationUrl:
+                  type: string
+                  format: http-url
+                  maxLength: 1000
+                  description: URL-адрес, на который будут приходить уведомления о изменении статуса диспута
+                  example: https://my.site/order/cb
       responses:
         '200':
           description: Диспут создан
@@ -105,13 +104,14 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
   /status:
+    servers:
+      - url: https://api.vality.dev/disputes
     get:
       operationId: status
       summary: Получить статус диспута
       tags:
         - disputes
       parameters:
-        - $ref: '#/components/parameters/requestID'
         - name: disputeId
           description: Идентификатор диспута
           in: query
@@ -149,6 +149,41 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /notify:
+    servers:
+      - url: https://merchant.site
+    post:
+      operationId: notify
+      summary: Уведомление об изменении статуса диспута
+      tags:
+        - notifications
+      requestBody:
+        description: Параметры диспута
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - invoiceId
+                - paymentId
+                - attachments
+              properties:
+                disputeId:
+                  $ref: '#/components/schemas/DisputeId'
+                invoiceId:
+                  $ref: '#/components/schemas/InvoiceID'
+                paymentId:
+                  $ref: '#/components/schemas/PaymentID'
+                status:
+                  description: Статус диспута
+                  type: string
+                  enum:
+                    - succeeded
+                    - failed
+      responses:
+        '200':
+          description: Уведомление обработано
 components:
   securitySchemes:
     bearerAuth:
@@ -181,15 +216,6 @@ components:
           schema:
             $ref: '#/components/schemas/GeneralError'
   parameters:
-    requestID:
-      name: X-Request-ID
-      in: header
-      description: Идентификатор запроса к системе
-      required: true
-      schema:
-        type: string
-        maxLength: 40
-        minLength: 1
   schemas:
     InvoiceID:
       description: Идентификатор инвоиса, на основе которого был создан платёж
