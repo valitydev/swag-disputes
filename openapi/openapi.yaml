@@ -187,6 +187,8 @@ paths:
       responses:
         '200':
           description: Уведомление обработано
+        '404':
+          $ref: '#/components/responses/NotFound'
 components:
   securitySchemes:
     bearerAuth:
