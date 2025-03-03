@@ -18,8 +18,6 @@ info:
   contact:
     name: Команда техподдержки
     email: support@vality.dev
-security:
-  - bearerAuth: []
 tags:
   - name: disputes
     x-displayName: Disputes
@@ -34,6 +32,8 @@ paths:
     servers:
       - url: https://api.vality.dev/disputes
     post:
+      security:
+        - bearerAuth: [ ]
       operationId: create
       summary: Создать диспут
       tags:
@@ -107,6 +107,8 @@ paths:
     servers:
       - url: https://api.vality.dev/disputes
     get:
+      security:
+        - bearerAuth: [ ]
       operationId: status
       summary: Получить статус диспута
       tags:
