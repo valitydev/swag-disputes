@@ -18,6 +18,10 @@ info:
   contact:
     name: Команда техподдержки
     email: support@vality.dev
+servers:
+  - url: https://api.vality.dev/disputes
+security:
+  - bearerAuth: []
 tags:
   - name: disputes
     x-displayName: Disputes
@@ -29,11 +33,7 @@ tags:
       Спецификация определяет протокол для доставки уведомлений о изменении статуса диспута в вашей организации. Уведомления доставляются системой в виде HTTP-запросов, содержащий сообщение JSON на URL-адрес, указанный при создании диспута. Обработчики таких запросов должны быть реализованы на стороне вашего серверного кода в соответствии со спецификацией.
 paths:
   /create:
-    servers:
-      - url: https://api.vality.dev/disputes
     post:
-      security:
-        - bearerAuth: [ ]
       operationId: create
       summary: Создать диспут
       tags:
@@ -104,11 +104,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
   /status:
-    servers:
-      - url: https://api.vality.dev/disputes
     get:
-      security:
-        - bearerAuth: [ ]
       operationId: status
       summary: Получить статус диспута
       tags:
@@ -155,6 +151,7 @@ paths:
     servers:
       - url: https://merchant.site
     post:
+      security: []
       operationId: notify
       summary: Уведомление об изменении статуса диспута
       tags:
@@ -220,7 +217,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/GeneralError'
-  parameters:
   schemas:
     InvoiceID:
       description: Идентификатор инвоиса, на основе которого был создан платёж
