@@ -28,7 +28,7 @@
         <slf4j-version>2.0.13</slf4j-version>
         <junit-version>4.13.2</junit-version>
         <jackson-version>2.13.1</jackson-version>
-        <spring-version>2.7.10</spring-version>
+        <spring-version>3.4.3</spring-version>
         <openapi-generator-version>7.6.0</openapi-generator-version>
     </properties>
 
