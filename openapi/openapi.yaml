@@ -181,6 +181,14 @@ paths:
                   enum:
                     - succeeded
                     - failed
+                reason:
+                  description: Причина фейла
+                  $ref: '#/components/schemas/GeneralError'
+                changedAmount:
+                    description: Измененная сумма платежа в минорных единицах
+                    type: integer
+                    format: int64
+                    minimum: 1
       responses:
         '200':
           description: Уведомление обработано
